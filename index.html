@@ -8,7 +8,8 @@
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- 使用 Font Awesome 6.x 確保品牌圖示如臉書能正常顯示 -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap');
         body { font-family: 'Noto Sans TC', sans-serif; }
@@ -19,14 +20,9 @@
     <div id="root"></div>
 
     <script type="text/babel">
-        const { 
-            Building2, MapPin, Users, ArrowDown, ArrowRight, 
-            Info, ShieldCheck, GraduationCap, Cpu, Calendar, 
-            Phone, Facebook, School 
-        } = window.lucide || {};
-
-        // 由於 CDN 環境下 Lucide 可能需要手動對應，我們直接使用 SVG 或簡單封裝
-        const Icon = ({ name, className }) => <i className={`fa-solid ${name} ${className}`}></i>;
+        const Icon = ({ name, className, isBrand = false }) => (
+            <i className={`${isBrand ? 'fa-brands' : 'fa-solid'} ${name} ${className}`}></i>
+        );
 
         const FlowNode = ({ icon, title, color = "blue", highlighted = false }) => {
             const colorClasses = {
@@ -38,7 +34,7 @@
             };
 
             return (
-                <div className={`flex flex-col items-center p-4 rounded-xl border-2 transition-all duration-300 hover:shadow-lg ${colorClasses[color]} ${highlighted ? 'ring-2 ring-blue-500 shadow-md scale-105' : ''} w-full max-w-[240px] mx-auto`}>
+                <div className={`flex flex-col items-center p-4 rounded-xl border-2 transition-all duration-300 hover:shadow-lg ${colorClasses[color]} ${highlighted ? 'ring-2 ring-blue-500 shadow-md scale-105' : ''} w-full max-w-[280px] mx-auto`}>
                     <Icon name={icon} className="text-2xl mb-2 opacity-80" />
                     <h3 className="font-bold text-center leading-tight text-sm md:text-base break-keep whitespace-normal">
                         {title}
@@ -49,8 +45,8 @@
 
         const DateCard = ({ region, date, color }) => (
             <div className={`flex flex-col items-center p-2 rounded-lg border ${color} bg-white shadow-sm`}>
-                <span className="text-xs font-bold text-slate-500">{region}</span>
-                <span className="text-sm font-black text-slate-800">{date}</span>
+                <span className="text-[10px] font-bold text-slate-500">{region}</span>
+                <span className="text-sm font-black text-slate-800 whitespace-nowrap">{date}</span>
             </div>
         );
 
@@ -90,7 +86,7 @@
                                 </div>
                             </div>
 
-                            {/* 三路分流 */}
+                            {}
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start mb-16 relative">
                                 
                                 {/* 分支 1: 協會體系 */}
@@ -102,7 +98,7 @@
                                         <Icon name="fa-arrow-down" className="text-blue-200" />
                                         <div className="relative w-full flex justify-center">
                                             <FlowNode icon="fa-school" title="補教業者" color="amber" highlighted={true} />
-                                            {/* 水平箭頭指向中間業者 */}
+                                            {/* 水平箭頭指向中間業者 - 參考手稿圖1 */}
                                             <div className="absolute -right-6 top-1/2 -translate-y-1/2 hidden md:block z-10">
                                                 <Icon name="fa-arrow-right" className="text-blue-300" />
                                             </div>
@@ -119,7 +115,7 @@
                                         <Icon name="fa-arrow-down" className="text-emerald-200" />
                                         <div className="relative w-full flex justify-center">
                                             <FlowNode icon="fa-school" title="補教業者" color="amber" />
-                                            {/* 水平箭頭指向說明會 */}
+                                            {/* 水平箭頭指向說明會 - 參考手稿圖1 */}
                                             <div className="absolute -right-6 top-1/2 -translate-y-1/2 hidden md:block z-10">
                                                 <Icon name="fa-arrow-right" className="text-amber-300" />
                                             </div>
@@ -132,7 +128,8 @@
                                     <div className="space-y-6 flex flex-col items-center w-full">
                                         <FlowNode icon="fa-microchip" title="資通處" color="indigo" />
                                         <Icon name="fa-arrow-down" className="text-indigo-200" />
-                                        <div className="w-full max-w-[240px] bg-indigo-50/50 p-4 rounded-2xl border border-indigo-100 shadow-sm">
+                                        {/* 日期卡片區塊 */}
+                                        <div className="w-full max-w-[260px] bg-indigo-50/50 p-4 rounded-2xl border border-indigo-100 shadow-sm">
                                             <div className="flex items-center gap-2 mb-4 justify-center text-indigo-700 font-bold">
                                                 <Icon name="fa-calendar-days" className="text-sm" />
                                                 <span>分區日期</span>
@@ -150,7 +147,7 @@
                                 </div>
                             </div>
 
-                            {/* 聯絡資訊區塊 */}
+                            {}
                             <div className="bg-slate-900 rounded-3xl p-6 md:p-8 text-white shadow-xl">
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
                                     <div>
@@ -171,8 +168,9 @@
                                     <div className="flex flex-col gap-4">
                                         <a href="https://www.facebook.com/hcsea1/?locale=zh_TW" target="_blank" className="bg-white/10 hover:bg-white/20 border border-white/10 p-4 rounded-2xl transition-all flex items-center justify-between group">
                                             <div className="flex items-center gap-3">
-                                                <div className="bg-blue-600 p-2 rounded-lg">
-                                                    <Icon name="fa-facebook-f" className="text-white" />
+                                                <div className="bg-blue-600 w-10 h-10 flex items-center justify-center rounded-lg shadow-lg">
+                                                    {/* 修復後的臉書圖示類別 */}
+                                                    <Icon name="fa-facebook-f" className="text-white text-xl" isBrand={true} />
                                                 </div>
                                                 <div className="font-bold">官方臉書專頁</div>
                                             </div>
