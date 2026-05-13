@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>個資法計畫書流程圖 - 新竹縣補教協會</title>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap');
+        body { font-family: 'Noto Sans TC', sans-serif; }
+        .break-keep { word-break: keep-all; }
+    </style>
+</head>
+<body class="bg-slate-50">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { 
+            Building2, MapPin, Users, ArrowDown, ArrowRight, 
+            Info, ShieldCheck, GraduationCap, Cpu, Calendar, 
+            Phone, Facebook, School 
+        } = window.lucide || {};
+
+        // 由於 CDN 環境下 Lucide 可能需要手動對應，我們直接使用 SVG 或簡單封裝
+        const Icon = ({ name, className }) => <i className={`fa-solid ${name} ${className}`}></i>;
+
+        const FlowNode = ({ icon, title, color = "blue", highlighted = false }) => {
+            const colorClasses = {
+                blue: "bg-blue-50 border-blue-200 text-blue-800",
+                indigo: "bg-indigo-50 border-indigo-200 text-indigo-800",
+                amber: "bg-amber-50 border-amber-200 text-amber-800",
+                slate: "bg-slate-50 border-slate-200 text-slate-800",
+                emerald: "bg-emerald-50 border-emerald-200 text-emerald-800",
+            };
+
+            return (
+                <div className={`flex flex-col items-center p-4 rounded-xl border-2 transition-all duration-300 hover:shadow-lg ${colorClasses[color]} ${highlighted ? 'ring-2 ring-blue-500 shadow-md scale-105' : ''} w-full max-w-[240px] mx-auto`}>
+                    <Icon name={icon} className="text-2xl mb-2 opacity-80" />
+                    <h3 className="font-bold text-center leading-tight text-sm md:text-base break-keep whitespace-normal">
+                        {title}
+                    </h3>
+                </div>
+            );
+        };
+
+        const DateCard = ({ region, date, color }) => (
+            <div className={`flex flex-col items-center p-2 rounded-lg border ${color} bg-white shadow-sm`}>
+                <span className="text-xs font-bold text-slate-500">{region}</span>
+                <span className="text-sm font-black text-slate-800">{date}</span>
+            </div>
+        );
+
+        const App = () => {
+            return (
+                <div className="min-h-screen p-4 md:p-8">
+                    <div className="max-w-6xl mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden border border-slate-100">
+                        
+                        {/* 標題區塊 */}
+                        <div className="bg-gradient-to-r from-blue-800 to-indigo-900 p-8 text-white">
+                            <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
+                                <div>
+                                    <h1 className="text-3xl font-black mb-1 tracking-tight">個資法計畫書流程圖</h1>
+                                    <p className="text-blue-100 flex items-center justify-center md:justify-start gap-2 opacity-90">
+                                        <Icon name="fa-shield-halved" className="text-sm" /> 
+                                        新竹縣補教協會製作
+                                    </p>
+                                </div>
+                                <div className="bg-white/10 backdrop-blur-md px-6 py-2 rounded-full border border-white/20 text-sm font-bold flex items-center gap-2">
+                                    <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+                                    第一階段執行中
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* 流程核心內容 */}
+                        <div className="p-4 md:p-12 relative">
+                            
+                            {/* 行政院頂層節點 */}
+                            <div className="flex flex-col items-center mb-12">
+                                <FlowNode icon="fa-landmark" title="行政院" color="slate" />
+                                <div className="h-8 w-0.5 bg-slate-200"></div>
+                                <div className="w-full h-0.5 bg-slate-200 max-w-[80%] mx-auto relative">
+                                    <div className="absolute left-0 top-0 h-4 w-0.5 bg-slate-200"></div>
+                                    <div className="absolute left-1/2 top-0 h-4 w-0.5 bg-slate-200 -translate-x-1/2"></div>
+                                    <div className="absolute right-0 top-0 h-4 w-0.5 bg-slate-200"></div>
+                                </div>
+                            </div>
+
+                            {/* 三路分流 */}
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start mb-16 relative">
+                                
+                                {/* 分支 1: 協會體系 */}
+                                <div className="flex flex-col items-center">
+                                    <div className="space-y-6 flex flex-col items-center w-full">
+                                        <FlowNode icon="fa-users-rectangle" title="中華民國補習教育全國總會" color="blue" />
+                                        <Icon name="fa-arrow-down" className="text-blue-200" />
+                                        <FlowNode icon="fa-map-location-dot" title="各地方協會" color="blue" />
+                                        <Icon name="fa-arrow-down" className="text-blue-200" />
+                                        <div className="relative w-full flex justify-center">
+                                            <FlowNode icon="fa-school" title="補教業者" color="amber" highlighted={true} />
+                                            {/* 水平箭頭指向中間業者 */}
+                                            <div className="absolute -right-6 top-1/2 -translate-y-1/2 hidden md:block z-10">
+                                                <Icon name="fa-arrow-right" className="text-blue-300" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* 分支 2: 教育體系 */}
+                                <div className="flex flex-col items-center">
+                                    <div className="space-y-6 flex flex-col items-center w-full">
+                                        <FlowNode icon="fa-graduation-cap" title="教育部" color="emerald" />
+                                        <Icon name="fa-arrow-down" className="text-emerald-200" />
+                                        <FlowNode icon="fa-building-columns" title="各縣市政府教育局處" color="emerald" />
+                                        <Icon name="fa-arrow-down" className="text-emerald-200" />
+                                        <div className="relative w-full flex justify-center">
+                                            <FlowNode icon="fa-school" title="補教業者" color="amber" />
+                                            {/* 水平箭頭指向說明會 */}
+                                            <div className="absolute -right-6 top-1/2 -translate-y-1/2 hidden md:block z-10">
+                                                <Icon name="fa-arrow-right" className="text-amber-300" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* 分支 3: 技術說明體系 */}
+                                <div className="flex flex-col items-center">
+                                    <div className="space-y-6 flex flex-col items-center w-full">
+                                        <FlowNode icon="fa-microchip" title="資通處" color="indigo" />
+                                        <Icon name="fa-arrow-down" className="text-indigo-200" />
+                                        <div className="w-full max-w-[240px] bg-indigo-50/50 p-4 rounded-2xl border border-indigo-100 shadow-sm">
+                                            <div className="flex items-center gap-2 mb-4 justify-center text-indigo-700 font-bold">
+                                                <Icon name="fa-calendar-days" className="text-sm" />
+                                                <span>分區日期</span>
+                                            </div>
+                                            <div className="grid grid-cols-2 gap-2 text-center">
+                                                <DateCard region="北區" date="5/5、6/9" color="border-blue-200" />
+                                                <DateCard region="中區" date="6/7" color="border-orange-200" />
+                                                <DateCard region="南區" date="4/28" color="border-red-200" />
+                                                <DateCard region="東區" date="5/17" color="border-emerald-200" />
+                                            </div>
+                                        </div>
+                                        <Icon name="fa-arrow-down" className="text-indigo-200" />
+                                        <FlowNode icon="fa-circle-info" title="說明會" color="indigo" highlighted={true} />
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* 聯絡資訊區塊 */}
+                            <div className="bg-slate-900 rounded-3xl p-6 md:p-8 text-white shadow-xl">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                                    <div>
+                                        <h2 className="text-2xl font-bold mb-4 flex items-center gap-2 text-blue-400">
+                                            新竹縣補教協會
+                                        </h2>
+                                        <div className="space-y-3 text-slate-300">
+                                            <div className="flex items-center gap-3">
+                                                <Icon name="fa-location-dot" className="text-blue-400" />
+                                                <span>新竹縣竹北市文孝街23號</span>
+                                            </div>
+                                            <div className="flex items-center gap-3">
+                                                <Icon name="fa-phone" className="text-blue-400" />
+                                                <span>03-6579876</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="flex flex-col gap-4">
+                                        <a href="https://www.facebook.com/hcsea1/?locale=zh_TW" target="_blank" className="bg-white/10 hover:bg-white/20 border border-white/10 p-4 rounded-2xl transition-all flex items-center justify-between group">
+                                            <div className="flex items-center gap-3">
+                                                <div className="bg-blue-600 p-2 rounded-lg">
+                                                    <Icon name="fa-facebook-f" className="text-white" />
+                                                </div>
+                                                <div className="font-bold">官方臉書專頁</div>
+                                            </div>
+                                            <Icon name="fa-chevron-right" className="text-slate-500 group-hover:translate-x-1 transition-transform" />
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* 頁尾 */}
+                        <div className="bg-slate-50 px-8 py-4 border-t border-slate-100 text-center">
+                            <p className="text-[10px] text-slate-400 font-bold tracking-widest uppercase">
+                                新竹縣補教協會
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
